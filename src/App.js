@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { ReactComponent as SunIcon } from "./resources/icon-sun.svg";
-import { ReactComponent as MoonIcon } from "./resources/icon-moon.svg";
 import { ReactComponent as CrossIcon } from "./resources/icon-cross.svg";
 import { ReactComponent as CheckIcon } from "./resources/icon-check.svg";
 import data from "./initialData";
@@ -14,7 +12,6 @@ import {
 function App() {
   const [todos, setTodos] = useState(data);
   const [completedCategory, setCompletedCategory] = useState(null);
-  const [isDay, setIsDay] = useState(false);
 
   const hasTodos = todos.length > 0;
   const newId = todos.length > 0 && todos[todos.length - 1].id + 1;
@@ -35,13 +32,9 @@ function App() {
     setCompletedCategory(boolean);
   };
 
-  const handleThemeToggle = () => {
-    setIsDay((isDay) => !isDay);
-  };
-
   return (
     <div className="App">
-      <NavBar isDay={isDay} onThemeClick={handleThemeToggle} />
+      <NavBar />
       <NewTodoBar newId={newId} onAddTodo={handleAddTodo} />
       {hasTodos && (
         <TodoList
@@ -65,14 +58,13 @@ function App() {
   );
 }
 
-const NavBar = ({ isDay, onThemeClick }) => {
+// Have to implement theme switching eventually
+const NavBar = () => {
   return (
     <>
       <img src="bg-mobile-dark.jpg" alt="cityscape" />
       <div className="NavBar">
         <h1>todo</h1>
-        {!isDay && <SunIcon onClick={onThemeClick} />}
-        {isDay && <MoonIcon onClick={onThemeClick} />}
       </div>
     </>
   );
@@ -107,7 +99,6 @@ const NewTodoBar = ({ newId, onAddTodo }) => {
           onKeyDown={handleKeyDown}
         />
       </div>
-      .
     </div>
   );
 };
