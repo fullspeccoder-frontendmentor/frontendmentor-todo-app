@@ -152,8 +152,8 @@ const Todo = ({ todo, onCompleteTodo, onDeleteTodo }) => {
       >
         {completed && <CheckIcon />}
       </div>
-      {!completed && <span>{title}</span>}
-      {completed && <strike>{title}</strike>}
+      {!completed && <span onClick={() => onCompleteTodo(id)}>{title}</span>}
+      {completed && <strike onClick={() => onCompleteTodo(id)}>{title}</strike>}
       <CrossIcon className="delete-btn" onClick={() => onDeleteTodo(id)} />
     </div>
   );
