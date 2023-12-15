@@ -103,7 +103,8 @@
   border-bottom: 1px solid var(--vDark-gray-blue);
 }
 
-.Todo > span:hover {
+.Todo > span:hover,
+.Todo > strike:hover {
   color: var(--hLight-gray-blue);
   cursor: pointer;
 }
