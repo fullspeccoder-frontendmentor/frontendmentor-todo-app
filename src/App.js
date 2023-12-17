@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { ReactComponent as CrossIcon } from "./resources/icon-cross.svg";
 import { ReactComponent as CheckIcon } from "./resources/icon-check.svg";
+import { ReactComponent as SunIcon } from "./resources/icon-sun.svg";
+import { ReactComponent as MoonIcon } from "./resources/icon-moon.svg";
 import data from "./initialData";
 import "./App.css";
 import {
@@ -12,9 +14,17 @@ import {
 function App() {
   const [todos, setTodos] = useState(data);
   const [completedCategory, setCompletedCategory] = useState(null);
+  const [theme, setTheme] = useState("light");
 
   const hasTodos = todos.length > 0;
   const newId = todos.length > 0 && todos[todos.length - 1].id + 1;
+
+  const sortedTodos =
+    completedCategory !== null
+      ? completedCategory === true
+        ? todos.filter((todo) => todo.completed)
+        : todos.filter((todo) => !todo.completed)
+      : [...todos];
 
   const handleCompleteTodo = (id) => {
     setTodos((todos) => changeCompleteStatusInListWithId(todos, id));
@@ -28,24 +38,43 @@ function App() {
     setTodos((todos) => deleteFromListWithId(todos, id));
   };
 
+  const handleClearCompletedTodos = () => {
+    setTodos((todos) => todos.filter((todo) => !todo.completed));
+  };
+
   const handleCategorySelection = (boolean) => {
     setCompletedCategory(boolean);
   };
 
+  const handleThemeToggle = () => {
+    // Temporary Fix to see it work in action
+    document.querySelector("body").style.backgroundColor = `${
+      theme === "light" ? "hsl(235, 21%, 11%)" : "hsl(233, 11%, 84%)"
+    }`;
+    setTheme((theme) => (theme === "light" ? "dark" : "light"));
+  };
+
   return (
-    <div className="App">
-      <NavBar />
+    <div className={`App ${theme}`}>
+      <NavBar theme={theme} onThemeToggle={handleThemeToggle} />
       <NewTodoBar newId={newId} onAddTodo={handleAddTodo} />
       {hasTodos && (
-        <TodoList
-          todos={todos}
-          onCompleteTodo={handleCompleteTodo}
-          onDeleteTodo={handleDeleteTodo}
-          onClearCompletedTodos={() => {
-            setTodos((todos) => todos.filter((todo) => !todo.completed));
-          }}
-          completedCategory={completedCategory}
-        />
+        <TodoList>
+          {sortedTodos.map((todo) => (
+            <Todo
+              key={todo.id}
+              todo={todo}
+              onCompleteTodo={handleCompleteTodo}
+              onDeleteTodo={handleDeleteTodo}
+            />
+          ))}
+
+          <TodoListFooter
+            sortedTodos={sortedTodos}
+            completedCategory={completedCategory}
+            onClearCompletedTodos={handleClearCompletedTodos}
+          />
+        </TodoList>
       )}
       {hasTodos && (
         <CategoriesBar
@@ -58,13 +87,14 @@ function App() {
   );
 }
 
-// Have to implement theme switching eventually
-const NavBar = () => {
+const NavBar = ({ theme, onThemeToggle }) => {
   return (
     <>
       <img src="bg-mobile-dark.jpg" alt="cityscape" />
       <div className="NavBar">
         <h1>todo</h1>
+        {theme === "dark" && <SunIcon onClick={onThemeToggle} />}
+        {theme === "light" && <MoonIcon onClick={onThemeToggle} />}
       </div>
     </>
   );
@@ -103,41 +133,25 @@ const NewTodoBar = ({ newId, onAddTodo }) => {
   );
 };
 
-const TodoList = ({
-  todos,
-  onCompleteTodo,
-  onDeleteTodo,
-  onClearCompletedTodos,
+const TodoList = ({ children }) => {
+  return <div className="TodoList">{children}</div>;
+};
+
+const TodoListFooter = ({
+  sortedTodos,
   completedCategory,
+  onClearCompletedTodos,
 }) => {
-  const sortedTodos =
-    completedCategory !== null
-      ? completedCategory === true
-        ? todos.filter((todo) => todo.completed)
-        : todos.filter((todo) => !todo.completed)
-      : [...todos];
-
   return (
-    <div className="TodoList">
-      {sortedTodos.map((todo) => (
-        <Todo
-          key={todo.id}
-          todo={todo}
-          onCompleteTodo={onCompleteTodo}
-          onDeleteTodo={onDeleteTodo}
-        />
-      ))}
-
-      <div className="TodoListFooter">
-        <span>
-          {completedCategory !== true
-            ? sortedTodos.length -
-              sortedTodos.filter((todo) => todo.completed).length
-            : sortedTodos.length}{" "}
-          items left
-        </span>
-        <span onClick={onClearCompletedTodos}>Clear Completed</span>
-      </div>
+    <div className="TodoListFooter">
+      <span>
+        {completedCategory !== true
+          ? sortedTodos.length -
+            sortedTodos.filter((todo) => todo.completed).length
+          : sortedTodos.length}{" "}
+        items left
+      </span>
+      <span onClick={onClearCompletedTodos}>Clear Completed</span>
     </div>
   );
 };

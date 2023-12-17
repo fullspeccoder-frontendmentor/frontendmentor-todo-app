@@ -3,11 +3,12 @@
   --bright-blue: hsl(220, 98%, 61%);
   --check-background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   /* Light Theme */
-  --vLight-gray: hsl(0, 0%, 98%);
-  --vLight-gray-blue: hsl(236, 33%, 92%);
-  --light-gray-blue: hsl(233, 11%, 84%);
-  --vDark-gray-blue: hsl(235, 19%, 35%);
-  --dark-gray-blue: hsl(236, 9%, 61%);
+  --todos-color: hsl(0, 0%, 98%);
+  --nav-text-color: hsl(236, 33%, 92%);
+  --app-background-color: hsl(233, 11%, 84%);
+  --todo-font-color: hsl(235, 19%, 35%);
+  --todo-font-hover-color: hsl(236, 33%, 92%);
+  --other-text-color: hsl(236, 9%, 61%);
   /* Dark Theme */
   --vDark-blue: hsl(235, 21%, 11%);
   --vDark-dBlue: hsl(235, 24%, 19%);
@@ -21,6 +22,24 @@
   --bold-font: 700;
 }
 
+.dark {
+  --todos-color: hsl(235, 24%, 19%);
+  --nav-text-color: hsl(236, 33%, 92%);
+  --app-background-color: hsl(235, 21%, 11%);
+  --todo-font-color: hsl(234, 39%, 85%);
+  --todo-font-hover-color: hsl(236, 33%, 92%);
+  --other-text-color: hsl(237, 14%, 26%);
+}
+
+.light {
+  --todos-color: hsl(0, 0%, 98%);
+  --nav-text-color: hsl(236, 33%, 92%);
+  --app-background-color: hsl(233, 11%, 84%);
+  --todo-font-color: hsl(235, 19%, 35%);
+  --todo-font-hover-color: hsl(235, 24%, 19%);
+  --other-text-color: hsl(236, 9%, 61%);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -31,5 +50,5 @@
 body {
   height: 100vh;
   font-size: 18px;
-  background-color: var(--vDark-blue);
+  background-color: var(--app-background-color);
 }
